@@ -6,4 +6,12 @@ model = YOLO("yolo11n.pt")  # load a pretrained model (recommended for training)
 model = YOLO("yolo11n.yaml").load("yolo11n.pt")  # build from YAML and transfer weights
 
 # Train the model
-results = model.train(data="data_sets/person_detection/data.yaml", epochs=50, batch=32, imgsz=640, device="mps", workers=8)
+results = model.train(data="data_sets/person_detection/data.yaml", epochs=4, imgsz=640, device="mps", plots=True)
+
+
+## Load a model
+model = YOLO("yolo11n.yaml")  # build a new model from YAML
+model = YOLO("yolo11n.pt")  # load a pretrained model (recommended for training)
+model = YOLO("yolo11n.yaml").load("yolo11n.pt")  # build from YAML and transfer weights
+# Train with evolved hyperparameters (optional)
+results = model.train(data="data_sets/person_detection/data.yaml", epochs=4, imgsz=640, device="mps", evolve=True, plots=True)

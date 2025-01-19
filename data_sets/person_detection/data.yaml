@@ -1,0 +1,13 @@
+train: /Users/lau/Documents/00AA UNI/3. Semester/Project Computer Vision/My Project/data_sets/person_detection/train/images
+val: /Users/lau/Documents/00AA UNI/3. Semester/Project Computer Vision/My Project/data_sets/person_detection/valid/images
+test: /Users/lau/Documents/00AA UNI/3. Semester/Project Computer Vision/My Project/data_sets/person_detection/test/images
+
+nc: 1
+names: ['Persona']
+
+roboflow:
+  workspace: titulacin
+  project: person-detection-9a6mk
+  version: 16
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/titulacin/person-detection-9a6mk/dataset/16
