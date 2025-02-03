@@ -1,2 +1,3 @@
 .DS_Store 
 train_runs/run_zips_unsorted
+.venv/
