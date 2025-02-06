@@ -55,7 +55,7 @@ def calibrate_cam(avg_mask_size, fetcher, model, stats_dict: dict):
             if box_center_list:
                 i = min(box_center_list)[1]
                 f = box_center_list[i][2] * calibration_distance / avg_mask_size  # Calculate the focal length
-                stats_dict["f camera in pxl"] = f  # Update the focal length
+                stats_dict["f"] = f  # Update the focal length
                 break   # Break the loop
         
         # Show the frame
