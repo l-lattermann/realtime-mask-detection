@@ -1,5 +1,27 @@
 import cv2
 
+def blur_face(frame, result, last_face_cords=None):
+    """
+        Blur faces in the frame. Returns the last frame coordinates, in case, nothing is detected in the next frame.
+        :param frame: frame to blur faces
+        :param result: result from the model
+
+        returns: None
+    """
+    if last_face_cords:
+        result = last_face_cords
+
+    for i in range(len(result[0].boxes.cls)):
+        x1, y1, x2, y2 = map(int, result[0].boxes.xyxy[i])
+        # Get the face region
+        face = frame[y1:y2, x1:x2]
+        # Blur the face
+        face = cv2.GaussianBlur(face, (21, 21), 30)
+        # Put the blurred face back in the frame
+        frame[y1:y2, x1:x2] = face
+        # Return the current frame coordinates
+        return result
+
 def put_stats_bar(frame, stats_dict: dict, bar_height=60,font_scale=0.5, font_thickness=1):
     """
         Add a stats bar at the bottom of the frame
@@ -81,7 +103,7 @@ def put_distance_line(frame, result, stats_dict: dict, distance_threshold=150, a
         box_width = (x2-x1) # Box width
         box_center_x = (x2-x1)/2 + x1  # x center coordinate
         box_center_y = (y2-y1)/2 + y1 # y center coordinate
-        box_center_z = (stats_dict["f camera in pxl"] / box_width) * avg_mask_size  # z center coordinate 
+        box_center_z = (stats_dict["f"] / box_width) * avg_mask_size  # z center coordinate 
         boxes.append((box_width, box_center_x, box_center_y, box_center_z))  # Add tuple to the list
 
     # Sort the boxes by scale    
@@ -136,7 +158,7 @@ def test_distance_line(frame, result, stats_dict: dict, distance_threshold=150, 
         box_width = (x2-x1) # Box width
         box_center_x = (x2-x1)/2 + x1  # x center coordinate
         box_center_y = (y2-y1)/2 + y1 # y center coordinate
-        box_center_z = (stats_dict["f camera in pxl"] / box_width) * avg_mask_size  # z center coordinate 
+        box_center_z = (stats_dict["f"] / box_width) * avg_mask_size  # z center coordinate 
         boxes.append((box_width, box_center_x, box_center_y, box_center_z))  # Add tuple to the list
 
     # Sort the boxes by scale    
@@ -213,10 +235,12 @@ def wait_for_key(stats_dict: dict, model_name_dict: dict):
         ord('u'): ("IOU", -0.01),
         ord('c'): ("Conf.", 0.01),
         ord('d'): ("Conf.", -0.01),
-        ord('p'): ("Pred. Framerate", 1),
-        ord('o'): ("Pred. Framerate", -1),
+        ord('p'): ("Inf. FPS", 1),
+        ord('o'): ("Inf. FPS", -1),
         ord('t'): ("Dist. test", True),
         ord('z'): ("Dist. test", False),
+        ord('b'): ("Blur", True),
+        ord('n'): ("Blur", False),
         ord('1'): ("Model", 1),
         ord('2'): ("Model", 2)
     }
@@ -239,10 +263,12 @@ def wait_for_key(stats_dict: dict, model_name_dict: dict):
         elif var == "Conf.":
             conf = max(min_conf, min(max_conf, stats_dict["Conf."] + delta))
             stats_dict[var] = conf
-        elif var == "Pred. Framerate":
-            pred_framerate = max(min_pred_framerate, min(max_pred_framerate, stats_dict["Pred. Framerate"] + delta))
+        elif var == "Inf. FPS":
+            pred_framerate = max(min_pred_framerate, min(max_pred_framerate, stats_dict["Inf. FPS"] + delta))
             stats_dict[var] = pred_framerate
         elif var == "Dist. test":
+            stats_dict[var] = delta
+        elif var == "Blur":
             stats_dict[var] = delta
         elif var == "Model":
             if delta == 1:

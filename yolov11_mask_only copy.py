@@ -23,7 +23,7 @@ def main():
     stats_update_interval = 3  # Stats update interval
 
     # Add model variables to the stats dictionary
-    stats_dict = {"Conf.": 0.7, "IOU": 0.5, "Pred. Framerate": 1, "f camera in pxl": 100,"Model": "YOLOv8n", "Dist. test": False}   # Initial values
+    stats_dict = {"Conf.": 0.7, "IOU": 0.5, "Inf. FPS": 1, "f": 100,"Model": "YOLOv8n", "Dist. test": False, "Blur": False}   # Initial values
 
     # Initialize the threaded frame fetcher
     fetcher = ff.FrameFetcher(0)
@@ -51,7 +51,7 @@ def main():
         model = model_dict[model_name]  # Get the model
 
         # Check every pred_framerate frames
-        if frame_count % stats_dict["Pred. Framerate"] == 0:
+        if frame_count % stats_dict["Inf. FPS"] == 0:
             # Perform inference for person and mask models
             inf_time = time.time()    # Start time 
             result = model(frame, conf=stats_dict["Conf."], iou=stats_dict["IOU"], stream=True, verbose=False)
@@ -87,6 +87,17 @@ def main():
         if stats_dict["Dist. test"]:
             print("Results: ", len(result[0].boxes.cls))
             cv2f.test_distance_line(frame, result, stats_dict, avg_mask_size)
+        
+         # Blur the faces
+        if stats_dict["Blur"]:
+            # Check if faces are detected
+            if len(result[0].boxes.cls) > 0:
+                # Save last face coordinates
+                last_face_cords = result
+                cv2f.blur_face(frame, result)
+            # If no faces are detected, blur at last face coordinates
+            elif len(result[0].boxes.cls) == 0 and "last_face_cords" in locals():
+                cv2f.blur_face(frame, last_face_cords)
         
         # Display the frame
         cv2.imshow("Detections", frame) 
