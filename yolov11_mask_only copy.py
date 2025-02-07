@@ -6,11 +6,13 @@ from scripts import cam_calibration as cc
 from scripts import cv2_functions as cv2f
 from scripts import frame_fetcher as ff
 
+from config import YOLOV11_MASK, YOLOV8_MASK
+
 
 def main():
     # Load models
-    v8n_mask = YOLO("models/yolo/train_runs/yolov8n_mask_100epochs/train/weights/best.pt")
-    v11n_mask = YOLO("models/yolo/train_runs/yolo11n_mask_100epochs/train/weights/best.pt")
+    v8n_mask = YOLO(str(YOLOV8_MASK))  # YOLOv8n mask model
+    v11n_mask = YOLO(str(YOLOV11_MASK))  # YOLOv11n mask model
 
     # Create model list
     model_dict = {"YOLOv8n":v8n_mask, "YOLOv11n": v11n_mask}
