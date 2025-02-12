@@ -1,7 +1,7 @@
 parameters,v8_mask,v8_person,v11_mask,v11_person
 task,detect,detect,detect,detect
 mode,train,train,train,train
-model,yolo11n.yaml,yolov8n.yaml,yolo11n.yaml,yolo11n.yaml
+model,yolov8n.yaml,yolov8n.yaml,yolo11n.yaml,yolo11n.yaml
 data,/content/Real-time-Face-Mask-Detection-and-Validation-System-Dataset-4/data.yaml,/content/Person-detection-16/data.yaml,/content/Real-time-Face-Mask-Detection-and-Validation-System-Dataset-4/data.yaml,/content/Person-detection-16/data.yaml
 epochs,100,100,100,100
 time,,,,
@@ -16,7 +16,7 @@ workers,8,8,8,8
 project,,,,
 name,train,train,train,train
 exist_ok,False,False,False,False
-pretrained,yolo11n.pt,yolov8n.pt,yolo11n.pt,yolo11n.pt
+pretrained,yolov8n.pt,yolov8n.pt,yolo11n.pt,yolo11n.pt
 optimizer,auto,auto,auto,auto
 verbose,True,True,True,True
 seed,0,0,0,0
