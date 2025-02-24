@@ -20,7 +20,7 @@ def blur_face(frame, result, last_face_cords=None):
         # Put the blurred face back in the frame
         frame[y1:y2, x1:x2] = face
         # Return the current frame coordinates
-        return result
+    return result
 
 def put_stats_bar(frame, stats_dict: dict, bar_height=60,font_scale=0.5, font_thickness=1):
     """
